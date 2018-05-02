@@ -92,7 +92,7 @@ def interpolate(results):
     rows,cols = np.shape(results)
     peak_x = []
     x_grid = np.linspace(0,100,100)
-    fout = open("output_normalized.csv","w")
+    #fout = open("output_normalized.csv","w")
     all_yintensities = []
     for i in range(cols-1):
         row = results[:,i]
@@ -102,9 +102,9 @@ def interpolate(results):
         norm_row = np.linspace(0,100,num=non_zero)
         interp_y = np.interp(x_grid, norm_row, row[row>0])
         all_yintensities.append(interp_y)
-        fout.writelines(["%.2f, " % x for x in interp_y])
-        fout.write("\n")
-    fout.close()
+        #fout.writelines(["%.2f, " % x for x in interp_y])
+        #fout.write("\n")
+    #fout.close()
     return all_yintensities, peak_x
 
 
