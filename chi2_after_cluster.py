@@ -9,12 +9,16 @@ def calculateChi(weightedIns, expIns):
     mixed_term_ = 0.0
     square_calc_ = 0.0
     Sindex = 0
-    for ins in expIns:
-        Iobs=ins
-        mixed_term_ += Iobs*weightedIns[Sindex]
-        square_calc_ += weightedIns[Sindex]*weightedIns[Sindex]
-        Sindex+=1
-    scale_factor = mixed_term_/square_calc_
+    weight1 = weightedIns[-1]
+    weight2 = expIns[-1]
+    weightedIns = weightedIns[:-1]
+    expIns = expIns[:-1]
+    #for ins in expIns:
+    #    Iobs=ins
+    #    mixed_term_ += Iobs*weightedIns[Sindex]
+    #    square_calc_ += weightedIns[Sindex]*weightedIns[Sindex]
+    #    Sindex+=1
+    #scale_factor = mixed_term_/square_calc_
     scale_factor = 1
     chi2_=0.0
     square_obs_ = 0.0
@@ -22,7 +26,7 @@ def calculateChi(weightedIns, expIns):
     for ins in expIns:
         Iobs=ins
         square_obs_ += Iobs*Iobs
-        chi2_+=(Iobs-scale_factor*weightedIns[Sindex])*(Iobs-scale_factor*weightedIns[Sindex])
+        chi2_+=(weight2*Iobs-weight1*weightedIns[Sindex])*(weight2*Iobs-weight1*weightedIns[Sindex])
         Sindex+=1
     #print chi2_, square_obs_
     #chi2_=chi2_/square_obs_
@@ -70,7 +74,7 @@ def generate_chis(all_yintensities_1, all_yintensities_2):
     for int1 in all_yintensities_1:
         iindex = 0
         for int2 in all_yintensities_2:
-            if iindex >= jindex:
+            if iindex > jindex:
                 continue
             chi2 =  calculateChi(int1,int2)
             #if chi2>1:

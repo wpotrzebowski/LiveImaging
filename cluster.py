@@ -120,12 +120,15 @@ number_of_clusters = int(sys.argv[2])
 
 data=np.vstack((all_yintensities))
 
-centroids, clust_sums =k_means_clust(data,number_of_clusters,20,4)
+centroids, clust_sums =k_means_clust(data,number_of_clusters,10,4)
 legend_lines = []
 for i, centroid in enumerate(centroids):
     line1, = plt.plot(centroid, label = "Members: "+str(clust_sums[i]))
     legend_lines.append(line1)
     plt.legend(handles=legend_lines)
-np.savetxt(fname[:-4]+"_centroids.csv", np.transpose(centroids), delimiter=",")
+print np.shape(centroids)
+print np.shape(clust_sums)
+cen_members = np.column_stack((centroids,clust_sums))
+np.savetxt(fname[:-4]+"_centroids.csv", np.transpose(cen_members), delimiter=",")
 plt.savefig(fname[:-4]+"_centroids.png")
 plt.show()
