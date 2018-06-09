@@ -11,6 +11,8 @@ def calculateChi(weightedIns, expIns):
     Sindex = 0
     weight1 = weightedIns[-1]
     weight2 = expIns[-1]
+    #weight1 = 1
+    #weight2 = 1
     weightedIns = weightedIns[:-1]
     expIns = expIns[:-1]
     #for ins in expIns:
@@ -74,8 +76,8 @@ def generate_chis(all_yintensities_1, all_yintensities_2):
     for int1 in all_yintensities_1:
         iindex = 0
         for int2 in all_yintensities_2:
-            if iindex > jindex:
-                continue
+            #if iindex > jindex:
+            #    continue
             chi2 =  calculateChi(int1,int2)
             #if chi2>1:
             #    excluded+=1
