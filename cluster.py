@@ -128,7 +128,6 @@ max_indexes = np.argsort(maximums).flatten()
 #centroids = centroids[np.argsort(maximums)
 cen_to_save = np.empty(np.shape(centroids))
 clust_sums_to_save = np.empty(np.shape(clust_sums))
-print np.shape(centroids)
 gb_index = 0
 for i in max_indexes:
     centroid = []
@@ -140,8 +139,8 @@ for i in max_indexes:
     legend_lines.append(line1)
     plt.legend(handles=legend_lines)
     gb_index +=1
-print np.shape(cen_to_save)
-print np.shape(clust_sums)
+#print np.shape(cen_to_save)
+#print np.shape(clust_sums)
 cen_members = np.column_stack((cen_to_save,clust_sums_to_save/np.sum(clust_sums_to_save)))
 np.savetxt(fname[:-4]+"_centroids.csv", np.transpose(cen_members), delimiter=",")
 plt.savefig(fname[:-4]+"_centroids.png")
