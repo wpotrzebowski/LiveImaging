@@ -1,18 +1,20 @@
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import sys
 
-def calculateChi(weightedIns, expIns):
+def calculateChi(weightedIns, expIns, use_weights = True):
     """
     Calculates chis 
     """
     mixed_term_ = 0.0
     square_calc_ = 0.0
     Sindex = 0
-    weight1 = weightedIns[-1]
-    weight2 = expIns[-1]
-    #weight1 = 1
-    #weight2 = 1
+    if use_weights:
+        weight1 = weightedIns[-1]
+        weight2 = expIns[-1]
+    else:
+        weight1 = 1
+        weight2 = 1
     weightedIns = weightedIns[:-1]
     expIns = expIns[:-1]
     #for ins in expIns:
@@ -32,7 +34,7 @@ def calculateChi(weightedIns, expIns):
         Sindex+=1
     #print chi2_, square_obs_
     #chi2_=chi2_/square_obs_
-    return chi2_
+    return chi2_/(len(expIns) - 1)
 
 def interpolate(results):
     rows,cols = np.shape(results)
@@ -58,7 +60,7 @@ def create_heatmap(chi2_array):
     plt.savefig("heat_map.png")
     plt.show()
 
-def generate_chis(all_yintensities_1, all_yintensities_2):
+def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
 
     #all_yintensities_1, peak_x_1 = interpolate(data1)
     #all_yintensities_2, peak_x_2 = interpolate(data2)
@@ -76,31 +78,36 @@ def generate_chis(all_yintensities_1, all_yintensities_2):
     for int1 in all_yintensities_1:
         iindex = 0
         for int2 in all_yintensities_2:
-            #if iindex > jindex:
-            #    continue
-            chi2 =  calculateChi(int1,int2)
+            if iindex == jindex:
+                chi2 =  calculateChi(int1,int2, use_weights)
             #if chi2>1:
             #    excluded+=1
             #    continue
             #accepted +=1
-            chi2_array[iindex][jindex] = chi2
-            cumulative_chi2 += chi2
-            if chi2>chi2_max:
-                chi2_max = chi2
+                chi2_array[iindex][jindex] = chi2
+                cumulative_chi2 += chi2
+                if chi2>chi2_max:
+                    chi2_max = chi2
             iindex+=1
         jindex+=1
 
-    create_heatmap(chi2_array.transpose())
-    print "Cumulative and max", cumulative_chi2, chi2_max, accepted, excluded
+    #create_heatmap(chi2_array.transpose())
+    if use_weights:
+        print "Cumulative and max chi2 using weights", cumulative_chi2, chi2_max
+    else:
+        print "Cumulative and max chi2 with no weights", cumulative_chi2, chi2_max
 
 if __name__ == "__main__":
     fin = open(sys.argv[1])
     fin1 = open(sys.argv[2])
     data1 = np.genfromtxt(fin, dtype="float64", delimiter=",")
     data2 = np.genfromtxt(fin1, dtype="float64", delimiter=",")
-    print("Comparing "+sys.argv[1]+" with "+sys.argv[2])
-    generate_chis(data1,data2)
-    print("Comparing "+sys.argv[1]+" with "+sys.argv[1])
-    generate_chis(data1,data1)
-    print("Comparing "+sys.argv[2]+" with "+sys.argv[2])
-    generate_chis(data2,data2)
+    print("Comparing with weights"+sys.argv[1]+" with "+sys.argv[2])
+    generate_chis(data1,data2, True)
+    print("Comparing with no weights"+sys.argv[1]+" with "+sys.argv[2])
+    generate_chis(data1,data2, False)
+
+    #print("Comparing "+sys.argv[1]+" with "+sys.argv[1])
+    #generate_chis(data1,data1)
+    #print("Comparing "+sys.argv[2]+" with "+sys.argv[2])
+    #generate_chis(data2,data2)

@@ -120,15 +120,29 @@ number_of_clusters = int(sys.argv[2])
 
 data=np.vstack((all_yintensities))
 
-centroids, clust_sums =k_means_clust(data,number_of_clusters,10,4)
+centroids, clust_sums =k_means_clust(data,number_of_clusters,20,4)
 legend_lines = []
-for i, centroid in enumerate(centroids):
-    line1, = plt.plot(centroid, label = "Members: "+str(clust_sums[i]))
+maximums = np.amax(centroids, axis=1)
+max_indexes = np.argsort(maximums).flatten()
+#Sorting centroids
+#centroids = centroids[np.argsort(maximums)
+cen_to_save = np.empty(np.shape(centroids))
+clust_sums_to_save = np.empty(np.shape(clust_sums))
+print np.shape(centroids)
+gb_index = 0
+for i in max_indexes:
+    centroid = []
+    for j in range(np.shape(centroids)[1]):
+        centroid.append(centroids[i][j])
+        cen_to_save[gb_index][j] = centroids[i][j]
+        clust_sums_to_save[gb_index]  = clust_sums[i]
+    line1, = plt.plot(np.array(centroid), label = "Members: "+str(clust_sums[i]))
     legend_lines.append(line1)
     plt.legend(handles=legend_lines)
-print np.shape(centroids)
+    gb_index +=1
+print np.shape(cen_to_save)
 print np.shape(clust_sums)
-cen_members = np.column_stack((centroids,clust_sums))
+cen_members = np.column_stack((cen_to_save,clust_sums_to_save/np.sum(clust_sums_to_save)))
 np.savetxt(fname[:-4]+"_centroids.csv", np.transpose(cen_members), delimiter=",")
 plt.savefig(fname[:-4]+"_centroids.png")
 plt.show()
