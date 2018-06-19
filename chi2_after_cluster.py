@@ -33,8 +33,8 @@ def calculateChi(weightedIns, expIns, use_weights = True):
         chi2_+=(weight2*Iobs-weight1*weightedIns[Sindex])*(weight2*Iobs-weight1*weightedIns[Sindex])
         Sindex+=1
     #print chi2_, square_obs_
-    #chi2_=chi2_/square_obs_
-    return chi2_/(len(expIns) - 1)
+    chi2_=chi2_/square_obs_
+    return chi2_
 
 def interpolate(results):
     rows,cols = np.shape(results)
@@ -102,9 +102,9 @@ if __name__ == "__main__":
     fin1 = open(sys.argv[2])
     data1 = np.genfromtxt(fin, dtype="float64", delimiter=",")
     data2 = np.genfromtxt(fin1, dtype="float64", delimiter=",")
-    print("Comparing with weights"+sys.argv[1]+" with "+sys.argv[2])
+    print("Comparing with weights "+sys.argv[1]+" with "+sys.argv[2])
     generate_chis(data1,data2, True)
-    print("Comparing with no weights"+sys.argv[1]+" with "+sys.argv[2])
+    print("Comparing with no weights "+sys.argv[1]+" with "+sys.argv[2])
     generate_chis(data1,data2, False)
 
     #print("Comparing "+sys.argv[1]+" with "+sys.argv[1])
