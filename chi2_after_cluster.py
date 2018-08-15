@@ -66,7 +66,7 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
     #all_yintensities_2, peak_x_2 = interpolate(data2)
     all_yintensities_1  = np.transpose(all_yintensities_1)
     all_yintensities_2  = np.transpose(all_yintensities_2)
-    print "Chi2 calculations"
+    print("Chi2 calculations")
     jindex = 0
     rows1 = len(all_yintensities_1)
     rows2 = len(all_yintensities_2)

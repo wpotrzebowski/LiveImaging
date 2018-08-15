@@ -45,5 +45,5 @@ def generate_images(inner_radius, outer_radius, number_of_points, image_name):
 
 if __name__ == "__main__":
     for i in range(100):
-        name = "circle_3_10_"+str(i)+".tiff"
-        generate_images(3, 10, 1000, name)
+        name = "circle_30_"+str(i)+".tiff"
+        generate_images(30, 100, 1000, name)

@@ -36,7 +36,7 @@ def LB_Keogh(s1,s2,r):
     return np.sqrt(LB_sum)
 
 def k_means_clust(data,num_clust,num_iter,w=5):
-    centroids=random.sample(data,num_clust)
+    centroids=random.sample(list(data),num_clust)
     counter=0
     for n in range(num_iter):
         counter+=1
@@ -110,7 +110,7 @@ def interpolate(results):
 
 fname = sys.argv[1]
 fin1 = open(fname)
-results = np.genfromtxt(fin1, dtype="float64", delimiter=",")
+results = np.genfromtxt(fname, dtype="float64", delimiter=",")
 print("Input size", np.shape(results))
 cleaned_results = remove_negatives(results)
 print("Size after cleanup", np.shape(cleaned_results))
@@ -119,7 +119,7 @@ all_yintensities, peak_x = interpolate(cleaned_results)
 number_of_clusters = int(sys.argv[2])
 
 data=np.vstack((all_yintensities))
-
+print(np.shape(data))
 centroids, clust_sums =k_means_clust(data,number_of_clusters,20,4)
 legend_lines = []
 maximums = np.amax(centroids, axis=1)
