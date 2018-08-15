@@ -1,7 +1,7 @@
+#!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-from sklearn.metrics import classification_report
 import random
 
 def DTWDistance(s1, s2,w):

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import numpy as np
 #import matplotlib.pyplot as plt
 import sys
@@ -93,9 +94,9 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
 
     #create_heatmap(chi2_array.transpose())
     if use_weights:
-        print "Cumulative and max chi2 using weights", cumulative_chi2, chi2_max
+        print ("Cumulative and max chi2 using weights", cumulative_chi2, chi2_max)
     else:
-        print "Cumulative and max chi2 with no weights", cumulative_chi2, chi2_max
+        print ("Cumulative and max chi2 with no weights", cumulative_chi2, chi2_max)
 
 if __name__ == "__main__":
     fin = open(sys.argv[1])
