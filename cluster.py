@@ -40,7 +40,7 @@ def k_means_clust(data,num_clust,num_iter,w=5):
     counter=0
     for n in range(num_iter):
         counter+=1
-        print counter
+        print(counter)
         assignments={}
         #assign data points to clusters
         for ind,i in enumerate(data):
