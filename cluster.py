@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+Dynamic time series following https://github.com/alexminnaar/time-series-classification-and-clustering
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -58,13 +61,13 @@ def k_means_clust(data,num_clust,num_iter,w=5):
                 assignments[closest_clust]=[]
 
         #recalculate centroids of clusters
-        clust_sums = []
+        clust_sums = {}
         for key in assignments:
             clust_sum=0
             for k in assignments[key]:
                 clust_sum=clust_sum+data[k]
             centroids[key]=[m/len(assignments[key]) for m in clust_sum]
-            clust_sums.append(len(assignments[key]))
+            clust_sums[key]= len(assignments[key])
     return centroids, clust_sums
 
 def remove_negatives(results):
@@ -121,13 +124,14 @@ number_of_clusters = int(sys.argv[2])
 data=np.vstack((all_yintensities))
 print(np.shape(data))
 centroids, clust_sums =k_means_clust(data,number_of_clusters,20,4)
+print(clust_sums)
 legend_lines = []
 maximums = np.amax(centroids, axis=1)
 max_indexes = np.argsort(maximums).flatten()
 #Sorting centroids
 #centroids = centroids[np.argsort(maximums)
 cen_to_save = np.empty(np.shape(centroids))
-clust_sums_to_save = np.empty(np.shape(clust_sums))
+clust_sums_to_save = np.empty(number_of_clusters)
 gb_index = 0
 for i in max_indexes:
     centroid = []
