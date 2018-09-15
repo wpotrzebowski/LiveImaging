@@ -62,13 +62,20 @@ def k_means_clust(data,num_clust,num_iter,w=5):
 
         #recalculate centroids of clusters
         clust_sums = {}
+        clust_fill = {}
         for key in assignments:
             clust_sum=0
+            all_data = []
             for k in assignments[key]:
                 clust_sum=clust_sum+data[k]
+                all_data.append(data[k])
             centroids[key]=[m/len(assignments[key]) for m in clust_sum]
             clust_sums[key]= len(assignments[key])
-    return centroids, clust_sums
+            all_data_np = np.array(all_data)
+            dmax = np.amax(all_data_np,axis=0)
+            dmin = np.amin(all_data_np,axis=0)
+            clust_fill[key]=np.abs(dmax-dmin)
+    return centroids, clust_sums, clust_fill
 
 def remove_negatives(results):
     """
@@ -122,9 +129,7 @@ all_yintensities, peak_x = interpolate(cleaned_results)
 number_of_clusters = int(sys.argv[2])
 
 data=np.vstack((all_yintensities))
-print(np.shape(data))
-centroids, clust_sums =k_means_clust(data,number_of_clusters,20,4)
-print(clust_sums)
+centroids, clust_sums, clust_fill =k_means_clust(data,number_of_clusters,20,4)
 legend_lines = []
 maximums = np.amax(centroids, axis=1)
 max_indexes = np.argsort(maximums).flatten()
@@ -138,10 +143,15 @@ for i in max_indexes:
     for j in range(np.shape(centroids)[1]):
         centroid.append(centroids[i][j])
         cen_to_save[gb_index][j] = centroids[i][j]
-        clust_sums_to_save[gb_index]  = clust_sums[i]
+    clust_sums_to_save[gb_index]  = clust_sums[i]
     line1, = plt.plot(np.array(centroid), label = "Members: "+str(clust_sums[i]))
     legend_lines.append(line1)
     plt.legend(handles=legend_lines)
+    xs = np.linspace(0,np.shape(centroids)[1],100)
+    lower = np.array(centroid)-0.5*clust_fill[i]
+    upper = np.array(centroid)+0.5*clust_fill[i]
+    plt.fill_between(xs, lower, upper, alpha=0.2)
+    plt.savefig(fname[:-4]+"_"+str(i)+"_centroids.png")
     gb_index +=1
 #print np.shape(cen_to_save)
 #print np.shape(clust_sums)
