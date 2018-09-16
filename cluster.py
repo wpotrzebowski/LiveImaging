@@ -153,7 +153,7 @@ for i in max_indexes:
     lower = clust_fill_lower[i]
     upper = clust_fill_upper[i]
     plt.fill_between(xs, lower, upper, alpha=0.2)
-    plt.savefig(fname[:-4]+"_"+str(i)+"_centroids.png")
+    #plt.savefig(fname[:-4]+"_"+str(i)+"_centroids.png")
     gb_index +=1
 #print np.shape(cen_to_save)
 #print np.shape(clust_sums)
