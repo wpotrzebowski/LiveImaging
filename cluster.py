@@ -43,7 +43,6 @@ def k_means_clust(data,num_clust,num_iter,w=5):
     counter=0
     for n in range(num_iter):
         counter+=1
-        print(counter)
         assignments={}
         #assign data points to clusters
         for ind,i in enumerate(data):
@@ -77,6 +76,7 @@ def k_means_clust(data,num_clust,num_iter,w=5):
             dmin = np.amin(all_data_np,axis=0)
             clust_fill_lower[key]=dmin
             clust_fill_upper[key]=dmax
+        print("Iteration: ", n,clust_sums)
     return centroids, clust_sums, clust_fill_lower, clust_fill_upper
 
 def remove_negatives(results):
@@ -129,9 +129,10 @@ print("Size after cleanup", np.shape(cleaned_results))
 all_yintensities, peak_x = interpolate(cleaned_results)
 
 number_of_clusters = int(sys.argv[2])
+number_of_iterations = int(sys.argv[3])
 
 data=np.vstack((all_yintensities))
-centroids, clust_sums, clust_fill_lower, clust_fill_upper =k_means_clust(data,number_of_clusters,20,4)
+centroids, clust_sums, clust_fill_lower, clust_fill_upper =k_means_clust(data,number_of_clusters,number_of_iterations,4)
 legend_lines = []
 maximums = np.amax(centroids, axis=1)
 max_indexes = np.argsort(maximums).flatten()
