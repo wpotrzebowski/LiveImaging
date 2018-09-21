@@ -42,7 +42,7 @@ def generate_images(inner_radius, outer_radius, number_of_points, image_name):
     no_points = 0
     radi = []
     intensities = []
-    mu, sigma = 0.5, 0.5
+    mu, sigma = 0.5, 0.25
     nomral_dist = np.random.normal(mu, sigma, number_of_points)
     while no_points <= number_of_points:
         accepted, point = getRandomPointsInCircle(inner_radius, outer_radius)
