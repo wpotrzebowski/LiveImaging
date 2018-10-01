@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 from pylab import cm
+import sys
 
 def gaussian(mu, sig, gauss_points):
     x = np.linspace(0, gauss_points, gauss_points)
@@ -41,12 +42,12 @@ def getRandomPointsInCircle(inner_radius, outer_radius):
     return accepted, accepted_point
 
 # Main function for testing
-def generate_images(inner_radius, outer_radius, number_of_points, image_name):
+def generate_images(inner_radius, outer_radius, gauss_sigma, number_of_points, image_name):
     XY_points = []
     no_points = 0
     intensities = []
     gauss_points = number_of_points
-    mu, sigma = 0.75*gauss_points, 0.5*(gauss_points)
+    mu, sigma = gauss_sigma*gauss_points, 0.5*(gauss_points)
     nomral_dist = gaussian(mu, sigma, gauss_points)
     indexes = np.linspace(0,gauss_points,gauss_points)
     while no_points < number_of_points:
@@ -64,8 +65,9 @@ def generate_images(inner_radius, outer_radius, number_of_points, image_name):
     print (np.shape(intensities), np.shape(XY_array))
     #norm1 = intensities / np.linalg.norm(intensities)
     fig = plt.figure()
-    plt.scatter(XY_array[:,0], XY_array[:,1], c=intensities, cmap=cm.Greys, s=1.0)
+    plt.scatter(XY_array[:,0], XY_array[:,1], c=intensities, cmap=cm.gist_gray, s=1.0)
     plt.axis('off')
+    plt.style.use('dark_background')
     #plt.show()
 
     # Save the image in memory in PNG format
@@ -79,13 +81,13 @@ def generate_images(inner_radius, outer_radius, number_of_points, image_name):
     png2.save(image_name)
     png1.close()
 
-    fig2 = plt.figure()
-    center, radi = (0,0), 0
-
-    rad = radial_profile(XY_array, center)
-
-    plt.plot(rad[radi:])
-    fig2.savefig("profile_"+name[:-5]+".png", format="png")
+    # fig2 = plt.figure()
+    # center, radi = (0,0), 0
+    #
+    # rad = radial_profile(XY_array, center)
+    #
+    # plt.plot(rad[radi:])
+    # fig2.savefig("profile_"+name[:-5]+".png", format="png")
 def normal_dist(gauss_points):
     mu, sigma = 0.9*gauss_points, 0.01*(gauss_points)
     nomral_dist = gaussian(mu, sigma, gauss_points)
@@ -93,6 +95,10 @@ def normal_dist(gauss_points):
     plt.show()
 if __name__ == "__main__":
     #normal_dist(100)
+    inner_radius = int(sys.argv[1])
+    outer_radius = int(sys.argv[2])
+    gaussian_sigma = float(sys.argv[3])
+    number_of_samples = int(sys.argv[4])
     for i in range(100):
-        name = "circle_30_2K_0.75_"+str(i)+".tiff"
-        generate_images(30, 100, 2000, name)
+        name = "circle_"+str(inner_radius)+"_"+str(outer_radius)+"_"+str(gaussian_sigma)+"_"+str(i)+".tiff"
+        generate_images(inner_radius, outer_radius, gaussian_sigma, number_of_samples, name)
