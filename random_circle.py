@@ -100,5 +100,6 @@ if __name__ == "__main__":
     gaussian_sigma = float(sys.argv[3])
     number_of_samples = int(sys.argv[4])
     for i in range(100):
-        name = "circle_"+str(inner_radius)+"_"+str(outer_radius)+"_"+str(gaussian_sigma)+"_"+str(i)+".tiff"
+        name = "circle_"+str(number_of_samples)+"_"+str(inner_radius)+"_"\
+               +str(outer_radius)+"_"+str(gaussian_sigma)+"_"+str(i)+".tiff"
         generate_images(inner_radius, outer_radius, gaussian_sigma, number_of_samples, name)
