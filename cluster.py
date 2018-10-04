@@ -130,9 +130,11 @@ all_yintensities, peak_x = interpolate(cleaned_results)
 
 number_of_clusters = int(sys.argv[2])
 number_of_iterations = int(sys.argv[3])
+window_size = int(sys.argv[4])
 
 data=np.vstack((all_yintensities))
-centroids, clust_sums, clust_fill_lower, clust_fill_upper =k_means_clust(data,number_of_clusters,number_of_iterations,4)
+centroids, clust_sums, clust_fill_lower, clust_fill_upper =\
+    k_means_clust(data,number_of_clusters,number_of_iterations,window_size)
 legend_lines = []
 maximums = np.amax(centroids, axis=1)
 max_indexes = np.argsort(maximums).flatten()
