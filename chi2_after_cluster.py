@@ -98,15 +98,42 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
     else:
         print ("Cumulative and max chi2 with no weights", cumulative_chi2, chi2_max)
 
+def generate_chis_pairs(all_yintensities_1, all_yintensities_2, use_weights):
+
+    #all_yintensities_1, peak_x_1 = interpolate(data1)
+    #all_yintensities_2, peak_x_2 = interpolate(data2)
+    all_yintensities_1  = np.transpose(all_yintensities_1)
+    all_yintensities_2  = np.transpose(all_yintensities_2)
+    print("Chi2 pairs calculations")
+    jindex = 0
+    rows1 = len(all_yintensities_1)
+    chi2_array = np.zeros((rows1))
+    cumulative_chi2 = 0
+    iindex = 0
+    for int1 in all_yintensities_1:
+        chi2a =  calculateChi(int1,all_yintensities_2[iindex], use_weights)
+        chi2b =  calculateChi(all_yintensities_2[iindex],int1, use_weights)
+        if chi2b<chi2a:
+            chi2_array[iindex] = chi2b
+        else:
+            chi2_array[iindex] = chi2a
+        cumulative_chi2 += chi2_array[iindex]
+        iindex+=1
+
+    if use_weights:
+        print ("Cumulative and max chi2 and individual weights", cumulative_chi2, chi2_array)
+    else:
+        print ("Cumulative and max chi2 and individual weights", cumulative_chi2, chi2_array)
+
 if __name__ == "__main__":
     fin = open(sys.argv[1])
     fin1 = open(sys.argv[2])
-    data1 = np.genfromtxt(fin, dtype="float64", delimiter=",")
-    data2 = np.genfromtxt(fin1, dtype="float64", delimiter=",")
+    data1 = np.genfromtxt(sys.argv[1], dtype="float64", delimiter=",")
+    data2 = np.genfromtxt(sys.argv[2], dtype="float64", delimiter=",")
     print("Comparing with weights "+sys.argv[1]+" with "+sys.argv[2])
-    generate_chis(data1,data2, True)
+    generate_chis_pairs(data1,data2, True)
     print("Comparing with no weights "+sys.argv[1]+" with "+sys.argv[2])
-    generate_chis(data1,data2, False)
+    generate_chis_pairs(data1,data2, False)
 
     #print("Comparing "+sys.argv[1]+" with "+sys.argv[1])
     #generate_chis(data1,data1)
