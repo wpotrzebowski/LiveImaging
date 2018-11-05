@@ -76,8 +76,9 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
     chi2_max = -100
     excluded = 0
     accepted = 0
+    iindex = 0
     for int1 in all_yintensities_1:
-        iindex = 0
+        jindex=0
         for int2 in all_yintensities_2:
             #if iindex == jindex:
             chi2a =  calculateChi(int1,int2, use_weights)
@@ -86,8 +87,8 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
                 chi2_array[iindex][jindex] = chi2b
             else:
                 chi2_array[iindex][jindex] = chi2a
-            iindex+=1
-        jindex+=1
+            jindex+=1
+        iindex+=1
 
     matching_indexes = []
     forbiden_indexes = []
@@ -112,7 +113,7 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
                           linestyle='dashed', color=colors[c_i])
         line2, = plt.plot(all_yintensities_2[i2][:-1], label="chi2 ="+str(chi2_fl),
                           color = colors[c_i])
-        legend_lines.append(line1)
+        #legend_lines.append(line1)
         legend_lines.append(line2)
     plt.legend(handles=legend_lines)
 
