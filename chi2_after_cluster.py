@@ -30,7 +30,7 @@ def calculateChi(weightedIns, expIns, use_weights = True):
     Sindex = 0
     for ins in expIns:
         Iobs=ins
-        square_obs_ += Iobs*Iobs
+        square_obs_ += Iobs*weightedIns[Sindex]
         chi2_+=(weight2*Iobs-weight1*weightedIns[Sindex])*(weight2*Iobs-weight1*weightedIns[Sindex])
         Sindex+=1
     #print chi2_, square_obs_
