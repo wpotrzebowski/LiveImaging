@@ -3,6 +3,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
+def DTWDistance(s1, s2,w):
+    DTW={}
+
+    w = max(w, abs(len(s1)-len(s2)))
+
+    for i in range(-1,len(s1)):
+        for j in range(-1,len(s2)):
+            DTW[(i, j)] = float('inf')
+    DTW[(-1, -1)] = 0
+
+    for i in range(len(s1)):
+        for j in range(max(0, i-w), min(len(s2), i+w)):
+            dist= (s1[i]-s2[j])**2
+            DTW[(i, j)] = dist + min(DTW[(i-1, j)],DTW[(i, j-1)], DTW[(i-1, j-1)])
+
+    return np.sqrt(DTW[len(s1)-1, len(s2)-1])
+
 def calculateChi(weightedIns, expIns, use_weights = True):
     """
     Calculates chis 
@@ -72,6 +89,7 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
     rows1 = len(all_yintensities_1)
     rows2 = len(all_yintensities_2)
     chi2_array = np.zeros((rows1,rows2))
+    dtw_array = np.zeros((rows1,rows2))
     cumulative_chi2 = 0
     chi2_max = -100
     excluded = 0
@@ -80,13 +98,14 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
     for int1 in all_yintensities_1:
         jindex=0
         for int2 in all_yintensities_2:
-            #if iindex == jindex:
-            chi2a =  calculateChi(int1,int2, use_weights)
-            chi2b =  calculateChi(int1,int2, use_weights)
-            if chi2b<chi2a:
-                chi2_array[iindex][jindex] = chi2b
-            else:
-                chi2_array[iindex][jindex] = chi2a
+            dtw = DTWDistance(int2,int1,5)
+            dtw_array[iindex][jindex] =dtw
+            chi2 = calculateChi(int1,int2, use_weights)
+            chi2_array[iindex][jindex] = chi2
+            #if chi2b<chi2a:
+            #    chi2_array[iindex][jindex] = chi2b
+            #else:
+            #    chi2_array[iindex][jindex] = chi2a
             jindex+=1
         iindex+=1
 
@@ -100,7 +119,6 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
             index+=1
         matching_indexes.append((i,min_i))
         forbiden_indexes.append(min_i)
-
     legend_lines = []
     colors = ['red', 'blue', 'green', 'black', 'orange', 'yellow']
 
@@ -108,10 +126,12 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
         i1 = matches[0]
         i2 = matches[1]
         chi2_fl = round(chi2_array[i1][i2],3)
+        dtw_fl = round(dtw_array[i1][i2],2)
         cumulative_chi2 += chi2_fl
         line1, = plt.plot(all_yintensities_1[i1][:-1],
                           linestyle='dashed', color=colors[c_i])
-        line2, = plt.plot(all_yintensities_2[i2][:-1], label="chi2 ="+str(chi2_fl),
+        line2, = plt.plot(all_yintensities_2[i2][:-1],
+                          label="chi2 = "+str(chi2_fl)+" dtw = "+str(dtw_fl),
                           color = colors[c_i])
         #legend_lines.append(line1)
         legend_lines.append(line2)
