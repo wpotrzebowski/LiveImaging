@@ -91,9 +91,8 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
     chi2_array = np.zeros((rows1,rows2))
     dtw_array = np.zeros((rows1,rows2))
     cumulative_chi2 = 0
-    chi2_max = -100
-    excluded = 0
-    accepted = 0
+    cumulative_dtw = 0
+
     iindex = 0
     for int1 in all_yintensities_1:
         jindex=0
@@ -128,6 +127,7 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
         chi2_fl = round(chi2_array[i1][i2],3)
         dtw_fl = round(dtw_array[i1][i2],2)
         cumulative_chi2 += chi2_fl
+        cumulative_dtw += dtw_fl
         line1, = plt.plot(all_yintensities_1[i1][:-1],
                           linestyle='dashed', color=colors[c_i])
         line2, = plt.plot(all_yintensities_2[i2][:-1],
@@ -139,9 +139,9 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
 
     #create_heatmap(chi2_array.transpose())
     if use_weights:
-        print ("Cumulative and max chi2 using weights", cumulative_chi2)
+        print ("Cumulative and max chi2 and dtw (weights)", cumulative_chi2, cumulative_dtw)
     else:
-        print ("Cumulative and max chi2 with no weights", cumulative_chi2)
+        print ("Cumulative and max chi2 and dtw", cumulative_chi2, cumulative_dtw)
 
     plt.show()
 
