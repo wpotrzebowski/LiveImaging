@@ -125,13 +125,13 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
         i1 = matches[0]
         i2 = matches[1]
         chi2_fl = round(chi2_array[i1][i2],3)
-        dtw_fl = round(dtw_array[i1][i2],2)
+        dtw_fl = round(dtw_array[i1][i2],1)
         cumulative_chi2 += chi2_fl
         cumulative_dtw += dtw_fl
         line1, = plt.plot(all_yintensities_1[i1][:-1],
                           linestyle='dashed', color=colors[c_i])
         line2, = plt.plot(all_yintensities_2[i2][:-1],
-                          label="chi2 = "+str(chi2_fl)+" dtw = "+str(dtw_fl),
+                          label="q = "+str(chi2_fl)+", d = "+str(dtw_fl),
                           color = colors[c_i])
         #legend_lines.append(line1)
         legend_lines.append(line2)
@@ -142,7 +142,7 @@ def generate_chis(all_yintensities_1, all_yintensities_2, use_weights):
         print ("Cumulative and max chi2 and dtw (weights)", cumulative_chi2, cumulative_dtw)
     else:
         print ("Cumulative and max chi2 and dtw", cumulative_chi2, cumulative_dtw)
-
+    plt.savefig("chi2_cmp.png", dpi=600)
     plt.show()
 
 
