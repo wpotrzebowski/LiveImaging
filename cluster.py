@@ -124,7 +124,8 @@ fname = sys.argv[1]
 fin1 = open(fname)
 results = np.genfromtxt(fname, dtype="float64", delimiter=",")
 print("Input size", np.shape(results))
-cleaned_results = remove_negatives(results)
+#cleaned_results = remove_negatives(results)
+cleaned_results = results
 print("Size after cleanup", np.shape(cleaned_results))
 all_yintensities, peak_x = interpolate(cleaned_results)
 
