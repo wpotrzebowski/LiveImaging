@@ -332,7 +332,6 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 			{
 				dataY[0][i] = dataY[0][i] / dataX[i];
 				dataX[i]    = (float) (cal.pixelWidth * mR * ((double)(i + 1) / nBins));
-				writeToFile(dataX[i], dataY[0][i]);
 			}
 			plot = new MultyPlotExt(getImageTitle(), "Radius ["+cal.getUnits()+"]", "Normalized Integrated Intensity",  dataX, dataY[0]);
 			headings[0] = "Radius [" + cal.getUnits() + "]";
@@ -343,7 +342,6 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 			{
 				dataY[0][i] = dataY[0][i] / dataX[i];
 				dataX[i]    = (float) (mR * ((double) (i + 1) / nBins));
-				writeToFile(dataX[i], dataY[0][i]);
 			}
 			plot = new MultyPlotExt(getImageTitle(), "Radius [pixels]", "Normalized Integrated Intensity",  dataX, dataY[0]);
 			headings[0] = "Radius [pixels]\t";
@@ -351,21 +349,22 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 		headings[1] = "Normalized Integrated Intensity";
 	        MultyPlotWindowExt wnd = plot.show();
         	wnd.setLineHeadings(headings, false);
+        writeToFile(dataX, dataY[0], nBins);
 	}
 
-    public void writeToFile(float dataX, float dataY)
+    public void writeToFile(float dataX[], float dataY[], int nBins)
     {
-        //Funkcja zapisujaca co pliku dataX i dataY[0]
-        //Nazawa pliku powinna zawierac tytul obrazka (mozna dostac dzieki getImageTitle + dataX[0] + dataY[0][0]
-        //Narazie testuje tylko proste zapisywanie do pliku
-        //String fileName = getImageTitle()+str(dataX)+" "+dataY;
-        Boolean ap = true;
-        File file = new File( "/Users/wojciechpotrzebowski/javatest.txt");
+        String fileName = getImageTitle()+dataX[0]+" "+dataY[0]+".txt";
+        Boolean ap = false;
+        File file = new File(fileName);
         FileWriter fr = null;
         try {
             fr = new FileWriter(file,ap );
-            fr.write(dataX + " " + dataY + " \n");
-
+            int i;
+            for (i = 0; i < nBins; i++)
+			{
+                fr.write(dataX[i] + " " + dataY[i] + " \n");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }finally{
