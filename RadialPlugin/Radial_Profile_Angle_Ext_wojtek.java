@@ -350,16 +350,16 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
         writeToFile(dataX);
 	}
 
-    public void writeToFile(array dataX)
+    public void writeToFile(array dataX, array dataY)
     {
         //Funkcja zapisujaca co pliku dataX i dataY[0]
         //Nazawa pliku powinna zawierac tytul obrazka (mozna dostac dzieki getImageTitle + dataX[0] + dataY[0][0]
         //Narazie testuje tylko proste zapisywanie do pliku
-        //String fileName = getImageTitle();
+        //String fileName = getImageTitle()+str(dataX)+" "+dataY;
         String fileName = "javatest.txt";
         file = File.open(fileName);
         //for (x=0; x < dataX.length; x++) {
-		//        print(file, dataX[x] + " \n");
+		//        print(file, dataX[x] + " " + dataY[x] + " \n");
 	    //}
 	    print(file, "\n ");
     }
