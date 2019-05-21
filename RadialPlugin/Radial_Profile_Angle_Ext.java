@@ -16,7 +16,9 @@ import java.awt.event.*;
 import java.awt.TextField;
 import java.util.*;
 import multi_plot.*;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 
 
 /** This plugin is an update of the Radial Profile plugin from Paul Baggethun.
@@ -330,6 +332,7 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 			{
 				dataY[0][i] = dataY[0][i] / dataX[i];
 				dataX[i]    = (float) (cal.pixelWidth * mR * ((double)(i + 1) / nBins));
+				writeToFile(dataX[i], dataY[0][i]);
 			}
 			plot = new MultyPlotExt(getImageTitle(), "Radius ["+cal.getUnits()+"]", "Normalized Integrated Intensity",  dataX, dataY[0]);
 			headings[0] = "Radius [" + cal.getUnits() + "]";
@@ -340,6 +343,7 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 			{
 				dataY[0][i] = dataY[0][i] / dataX[i];
 				dataX[i]    = (float) (mR * ((double) (i + 1) / nBins));
+				writeToFile(dataX[i], dataY[0][i]);
 			}
 			plot = new MultyPlotExt(getImageTitle(), "Radius [pixels]", "Normalized Integrated Intensity",  dataX, dataY[0]);
 			headings[0] = "Radius [pixels]\t";
@@ -347,21 +351,31 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 		headings[1] = "Normalized Integrated Intensity";
 	        MultyPlotWindowExt wnd = plot.show();
         	wnd.setLineHeadings(headings, false);
-        writeToFile(dataX);
 	}
 
-    public void writeToFile(array dataX)
+    public void writeToFile(float dataX, float dataY)
     {
         //Funkcja zapisujaca co pliku dataX i dataY[0]
         //Nazawa pliku powinna zawierac tytul obrazka (mozna dostac dzieki getImageTitle + dataX[0] + dataY[0][0]
         //Narazie testuje tylko proste zapisywanie do pliku
-        //String fileName = getImageTitle();
-        String fileName = "javatest.txt";
-        file = File.open(fileName);
-        //for (x=0; x < dataX.length; x++) {
-		//        print(file, dataX[x] + " \n");
-	    //}
-	    print(file, "\n ");
+        //String fileName = getImageTitle()+str(dataX)+" "+dataY;
+        Boolean ap = true;
+        File file = new File( "/Users/wojciechpotrzebowski/javatest.txt");
+        FileWriter fr = null;
+        try {
+            fr = new FileWriter(file,ap );
+            fr.write(dataX + " " + dataY + " \n");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally{
+            //close resources
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
