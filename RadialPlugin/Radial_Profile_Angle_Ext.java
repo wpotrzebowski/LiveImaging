@@ -17,6 +17,7 @@ import java.awt.TextField;
 import java.util.*;
 import multi_plot.*;
 import java.io.File;
+import ij.io.FileInfo;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -354,7 +355,10 @@ public class Radial_Profile_Angle_Ext implements PlugInFilter, ImageListener, Ac
 
     public void writeToFile(float dataX[], float dataY[], int nBins)
     {
-        String fileName = getImageTitle()+dataX[0]+" "+dataY[0]+".txt";
+        FileInfo imgInfo = imp.getFileInfo();
+        //String dir = imgInfo.directory;
+        String dir = "/Users/vemsomhelst/imagej_output/";
+        String fileName = dir+getImageTitle()+dataX[0]+" "+dataY[0]+".txt";
         Boolean ap = false;
         File file = new File(fileName);
         FileWriter fr = null;
